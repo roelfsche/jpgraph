@@ -2804,12 +2804,12 @@ class Graph
         });
         reset($aPlots);
         $n = safe_count($aPlots);
-        $i = 0;
+        // $i = 0;
         //\Kint::dump($n, $aPlots);
-        do {
-            //\Kint::dump($i, $aPlots[$i]);
-            list($xmax, $max) = isset($aPlots[$i]) ? $aPlots[$i]->Max() : [null, null];
-        } while (++$i < $n && !is_numeric($max));
+        $xmax = $max = null;
+        foreach($aPlots as $i => $plot) {
+            list($xmax, $max) = $plot->Max();
+        }
 
         $i = 0;
         do {
