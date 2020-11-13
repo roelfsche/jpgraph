@@ -24,10 +24,10 @@ require_once ROOT_PATH . '/vendor/autoload.php';
 
 use Amenadiel\JpGraph\Util\ErrMsgText;
 
-if (is_readable(ROOT_PATH . '/.env') && class_exists('\Symfony\Component\Dotenv\Dotenv')) {
-    $dotenv = new \Symfony\Component\Dotenv\Dotenv();
-    $dotenv->load(ROOT_PATH . '/.env');
-}
+// if (is_readable(ROOT_PATH . '/.env') && class_exists('\Symfony\Component\Dotenv\Dotenv')) {
+//     $dotenv = new \Symfony\Component\Dotenv\Dotenv();
+//     $dotenv->load(ROOT_PATH . '/.env');
+// }
 
 if (getenv('JPGRAPH_DEBUGMODE') && !defined('DEBUGMODE')) {
     define('DEBUGMODE', getenv('JPGRAPH_DEBUGMODE'));
