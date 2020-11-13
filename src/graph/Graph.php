@@ -1277,8 +1277,7 @@ class Graph
                 $max = 0;
                 $n   = safe_count($aPlots);
 
-                for ($i = 0; $i < $n; ++$i) {
-                    $p = $aPlots[$i];
+                foreach($aPlots as $p) {
 
                     // We need some unfortunate sub class knowledge here in order
                     // to increase number of data points in case it is a line plot
@@ -1562,10 +1561,10 @@ class Graph
         // Do any pre-stroke adjustment that is needed by the different plot types
         // (i.e bar plots want's to add an offset to the x-labels etc)
         for ($i = 0; $i < safe_count($this->plots); ++$i) {
-            if ($this->plots[$i] instanceof Plot\Plot) {
+            // if ($this->plots[$i] instanceof Plot\Plot) {
                 $this->plots[$i]->PreStrokeAdjust($this);
                 $this->plots[$i]->DoLegend($this);
-            }
+            // }
         }
 
         // Any plots on the second Y scale?
@@ -1654,7 +1653,9 @@ class Graph
         // himself then the legends have alsready been populated once in order to get the
         // CSIM coordinats. Since we do not want the legends to be populated a second time
         // we clear the legends
-        $this->legend->Clear();
+        // Don't clear it; need to add additional legends for PlotLine's, which aren't
+        // recognized in doPrestroeAdjustements()
+        // $this->legend->Clear();
 
         // We need to know if we have stroked the plot in the
         // GetCSIMareas. Otherwise the CSIM hasn't been generated
@@ -2812,17 +2813,20 @@ class Graph
         }
 
         $i = 0;
-        do {
-            list($xmin, $min) = isset($aPlots[$i]) ? $aPlots[$i]->Min() : [null, null];
-        } while (++$i < $n && !is_numeric($min));
+        $xmin = $min = null;
+        // do {
+            foreach($aPlots as $plot)
+            list($xmin, $min) = $plot->Min() ;
+        // } while (++$i < $n && !is_numeric($min));
 
         if (!is_numeric($min) || !is_numeric($max)) {
             Util\JpGraphError::RaiseL(25044); //('Cannot use autoscaling since it is impossible to determine a valid min/max value  of the Y-axis (only null values).');
         }
 
-        for ($i = 0; $i < $n; ++$i) {
-            list($xmax, $ymax) = isset($aPlots[$i]) ? $aPlots[$i]->Max() : [null, null];
-            list($xmin, $ymin) = isset($aPlots[$i]) ? $aPlots[$i]->Min() : [null, null];
+        // for ($i = 0; $i < $n; ++$i) {
+        foreach($aPlots as $plot)
+            list($xmax, $ymax) = $plot->Max();
+            list($xmin, $ymin) = $plot->Min();
             if (is_numeric($ymax)) {
                 $max = max($max, $ymax);
             }
@@ -2830,7 +2834,7 @@ class Graph
             if (is_numeric($ymin)) {
                 $min = min($min, $ymin);
             }
-        }
+        // }
         if ($min == '') {
             $min = 0;
         }
